@@ -1,0 +1,565 @@
+/* =============================================================================
+  theme.css · Cuidado Personal
+  -----------------------------------------------------------------------------
+  Tokens visuales para una app clara, estética y suave:
+  cabello, uñas, rostro, cuerpo, estilo, productos y rutinas bonitas en orden.
+
+  Mantiene nombres de variables existentes para compatibilidad con app.css.
+============================================================================= */
+
+:root {
+  /* =========================
+     Color system · base
+  ========================= */
+
+  --bg: #fff8fd;
+  --bg2: #f8f1ff;
+  --bg3: #fffdf7;
+
+  /* Superficies */
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface2: rgba(255, 250, 255, 0.82);
+  --surface3: rgba(255, 246, 252, 0.68);
+  --surfaceSolid: #ffffff;
+
+  /* Texto */
+  --text: #24143d;
+  --text2: #3f2a5f;
+  --muted: rgba(36, 20, 61, 0.66);
+  --muted2: rgba(36, 20, 61, 0.48);
+  --muted3: rgba(36, 20, 61, 0.34);
+
+  /* Bordes */
+  --line: rgba(128, 90, 213, 0.14);
+  --line2: rgba(128, 90, 213, 0.22);
+  --line3: rgba(217, 70, 239, 0.18);
+
+  /* =========================
+     Marca / acentos
+  ========================= */
+
+  /* Principal: morado Musicala suave */
+  --primary: #7c3aed;
+  --primary2: #6d28d9;
+  --primary3: #4c1d95;
+  --primarySoft: rgba(124, 58, 237, 0.13);
+  --primarySoft2: rgba(124, 58, 237, 0.08);
+
+  /* Fucsia / blush */
+  --pink: #d946ef;
+  --pink2: #c026d3;
+  --pinkSoft: rgba(217, 70, 239, 0.13);
+  --pinkSoft2: rgba(217, 70, 239, 0.08);
+
+  /* Lila */
+  --violet: #8b5cf6;
+  --violet2: #7c3aed;
+  --violetSoft: rgba(139, 92, 246, 0.14);
+  --violetSoft2: rgba(139, 92, 246, 0.08);
+
+  /* Blush / rosado piel */
+  --blush: #fb7185;
+  --blush2: #f43f5e;
+  --blushSoft: rgba(251, 113, 133, 0.14);
+  --blushSoft2: rgba(251, 113, 133, 0.08);
+
+  /* Champagne / crema */
+  --champagne: #f7dca7;
+  --champagne2: #f59e0b;
+  --champagneSoft: rgba(247, 220, 167, 0.34);
+
+  /* Teal suave para contraste */
+  --teal: #14b8a6;
+  --teal2: #0f766e;
+  --tealSoft: rgba(20, 184, 166, 0.12);
+  --tealSoft2: rgba(20, 184, 166, 0.07);
+
+  /* Amber compatible */
+  --amber: #f59e0b;
+  --amberSoft: rgba(245, 158, 11, 0.14);
+
+  /* =========================
+     Estados
+  ========================= */
+
+  --success: #16a34a;
+  --successSoft: rgba(22, 163, 74, 0.12);
+
+  --warning: #f59e0b;
+  --warningSoft: rgba(245, 158, 11, 0.14);
+
+  --danger: #ef4444;
+  --dangerSoft: rgba(239, 68, 68, 0.12);
+
+  --info: #3b82f6;
+  --infoSoft: rgba(59, 130, 246, 0.12);
+
+  /* =========================
+     Gradientes
+  ========================= */
+
+  --gradPrimary: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);
+  --gradSoft: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(217, 70, 239, 0.10));
+  --gradCard: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 253, 0.88));
+  --gradWarm: linear-gradient(135deg, rgba(251, 113, 133, 0.14), rgba(247, 220, 167, 0.22));
+  --gradCool: linear-gradient(135deg, rgba(139, 92, 246, 0.13), rgba(20, 184, 166, 0.08));
+
+  /* =========================
+     Sombras
+  ========================= */
+
+  --shadow: 0 18px 48px rgba(74, 42, 120, 0.13);
+  --shadow2: 0 12px 28px rgba(74, 42, 120, 0.10);
+  --shadow3: 0 7px 18px rgba(74, 42, 120, 0.08);
+  --shadow4: 0 4px 10px rgba(74, 42, 120, 0.06);
+
+  --shadowPink: 0 16px 36px rgba(217, 70, 239, 0.18);
+  --shadowViolet: 0 16px 36px rgba(124, 58, 237, 0.18);
+
+  /* =========================
+     Radius
+  ========================= */
+
+  --r8: 8px;
+  --r10: 10px;
+  --r12: 12px;
+  --r14: 14px;
+  --r16: 16px;
+  --r18: 18px;
+  --r20: 20px;
+  --r24: 24px;
+  --r28: 28px;
+  --r32: 32px;
+  --pill: 999px;
+
+  /* =========================
+     Spacing
+  ========================= */
+
+  --pad: 14px;
+  --pad2: 12px;
+  --pad3: 10px;
+  --pad4: 8px;
+
+  --gap: 10px;
+  --gap2: 14px;
+  --gap3: 18px;
+  --gap4: 24px;
+
+  /* =========================
+     Typography
+  ========================= */
+
+  --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+
+  --fs-10: 10px;
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-22: 22px;
+  --fs-24: 24px;
+  --fs-28: 28px;
+
+  --lh-tight: 1.12;
+  --lh: 1.35;
+  --lh-loose: 1.55;
+
+  --fw-regular: 400;
+  --fw-medium: 600;
+  --fw-bold: 750;
+  --fw-black: 900;
+
+  /* =========================
+     Effects
+  ========================= */
+
+  --blur: 14px;
+  --blur2: 22px;
+  --blur3: 30px;
+
+  --focus: 0 0 0 4px rgba(217, 70, 239, 0.16);
+  --focus2: 0 0 0 4px rgba(124, 58, 237, 0.18);
+
+  --ease: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --easeOut: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --t: 160ms var(--ease);
+  --t2: 240ms var(--ease);
+  --t3: 360ms var(--easeOut);
+
+  /* =========================
+     Layout
+  ========================= */
+
+  --safeBottom: env(safe-area-inset-bottom, 0px);
+  --safeTop: env(safe-area-inset-top, 0px);
+
+  --maxw: 980px;
+  --bottomNavH: 76px;
+}
+
+/* =============================================================================
+   Base reset
+============================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  color-scheme: light;
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background:
+    radial-gradient(900px 620px at 10% -12%, rgba(217, 70, 239, 0.15), transparent 62%),
+    radial-gradient(820px 560px at 92% 2%, rgba(124, 58, 237, 0.14), transparent 60%),
+    radial-gradient(760px 540px at 50% 112%, rgba(247, 220, 167, 0.28), transparent 58%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg2) 52%, var(--bg3) 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--fs-14);
+  line-height: var(--lh);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Decoración muy suave de fondo */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.75) 0 1px, transparent 1px),
+    radial-gradient(circle at 80% 34%, rgba(217, 70, 239, 0.18) 0 1px, transparent 1px),
+    radial-gradient(circle at 64% 78%, rgba(124, 58, 237, 0.12) 0 1px, transparent 1px);
+  background-size: 42px 42px, 58px 58px, 72px 72px;
+  opacity: 0.55;
+}
+
+/* =============================================================================
+   Element defaults
+============================================================================= */
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+textarea:disabled,
+select:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+input,
+textarea,
+select {
+  min-width: 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+strong,
+b {
+  font-weight: var(--fw-black);
+}
+
+small {
+  font-size: var(--fs-12);
+}
+
+::selection {
+  color: #24143d;
+  background: rgba(217, 70, 239, 0.20);
+}
+
+/* =============================================================================
+   Scrollbar
+============================================================================= */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 58, 237, 0.35) rgba(255, 255, 255, 0.35);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.36);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.38), rgba(217, 70, 239, 0.32));
+  border: 2px solid rgba(255, 255, 255, 0.76);
+  border-radius: var(--pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.54), rgba(217, 70, 239, 0.46));
+}
+
+/* =============================================================================
+   Helpers
+============================================================================= */
+
+.surface {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r20);
+  box-shadow: var(--shadow3);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+.surface-strong {
+  background: var(--gradCard);
+  border: 1px solid var(--line2);
+  border-radius: var(--r24);
+  box-shadow: var(--shadow2);
+  backdrop-filter: blur(var(--blur2));
+  -webkit-backdrop-filter: blur(var(--blur2));
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  box-shadow: var(--shadow3);
+  backdrop-filter: blur(var(--blur2));
+  -webkit-backdrop-filter: blur(var(--blur2));
+}
+
+.hr {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line2), transparent);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.muted2 {
+  color: var(--muted2);
+}
+
+.muted3 {
+  color: var(--muted3);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-pink {
+  color: var(--pink);
+}
+
+.text-violet {
+  color: var(--violet);
+}
+
+.text-teal {
+  color: var(--teal2);
+}
+
+.bg-soft {
+  background: var(--gradSoft);
+}
+
+.bg-warm {
+  background: var(--gradWarm);
+}
+
+.bg-cool {
+  background: var(--gradCool);
+}
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* =============================================================================
+   Focus
+============================================================================= */
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: var(--r12);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  box-shadow: var(--focus2);
+}
+
+/* =============================================================================
+   Motion
+============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t: 0ms;
+    --t2: 0ms;
+    --t3: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =============================================================================
+   Responsive tokens
+============================================================================= */
+
+@media (max-width: 720px) {
+  :root {
+    --pad: 12px;
+    --pad2: 10px;
+    --gap: 9px;
+    --gap2: 12px;
+    --gap3: 16px;
+
+    --fs-20: 19px;
+    --fs-22: 21px;
+    --fs-24: 23px;
+    --fs-28: 26px;
+
+    --bottomNavH: 72px;
+  }
+
+  body {
+    background-attachment: scroll;
+  }
+}
+
+@media (max-width: 380px) {
+  :root {
+    --fs-13: 12.5px;
+    --fs-14: 13.5px;
+    --fs-16: 15px;
+
+    --r24: 22px;
+    --r28: 24px;
+  }
+}
+
+/* =============================================================================
+   Print
+============================================================================= */
+
+@media print {
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface2: #ffffff;
+    --surface3: #ffffff;
+    --text: #111111;
+    --muted: #555555;
+    --line: #dddddd;
+    --shadow: none;
+    --shadow2: none;
+    --shadow3: none;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+
+  body::before {
+    display: none !important;
+  }
+
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}
