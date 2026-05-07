@@ -4,17 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-  <title>Cuidado Personal</title>
+  <title>Control Personal Alek</title>
 
   <meta
     name="description"
-    content="Seguimiento bonito y simple para cabello, uñas, rostro, cuerpo, estilo, productos y rutinas de cuidado personal."
+    content="App personal para registrar cuidados como corte de cabello, limpiezas faciales, skincare, barba, depilación por zonas, uñas de manos y pies, con frecuencias y próximos cuidados."
   />
   <meta name="theme-color" content="#7C3AED" />
   <meta name="color-scheme" content="light" />
   <meta name="format-detection" content="telephone=no" />
-  <meta name="application-name" content="Cuidado Personal" />
-  <meta name="apple-mobile-web-app-title" content="Cuidado Personal" />
+  <meta name="application-name" content="Control Personal Alek" />
+  <meta name="apple-mobile-web-app-title" content="Control Personal Alek" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
@@ -29,13 +29,18 @@
 <body>
   <a class="skip" href="#main">Saltar al contenido</a>
 
+  <!-- =========================================================
+    TOPBAR
+  ========================================================== -->
   <header class="topbar">
-    <div class="brand" aria-label="Cuidado Personal">
+    <div class="brand" aria-label="Control Personal Alek">
       <div class="logoDot" aria-hidden="true"></div>
 
       <div class="brandText">
-        <div class="brandTitle">Cuidado Personal</div>
-        <div class="brandSub" id="subtitle">Cabello, uñas, piel y rutinas bonitas en orden</div>
+        <div class="brandTitle">Control Personal Alek</div>
+        <div class="brandSub" id="subtitle">
+          Cabello, rostro, barba, depilación, uñas y cuidado personal en orden
+        </div>
       </div>
     </div>
 
@@ -44,7 +49,7 @@
         Alek
       </button>
 
-      <button class="iconBtn" id="settingsBtn" type="button" aria-label="Ajustes y copia de seguridad">
+      <button class="iconBtn" id="settingsBtn" type="button" aria-label="Abrir ajustes y respaldo">
         ⚙️
       </button>
 
@@ -55,6 +60,9 @@
   </header>
 
   <main id="main" class="shell">
+    <!-- =========================================================
+      TABS DESKTOP / TABLET
+    ========================================================== -->
     <nav class="tabs" aria-label="Secciones principales">
       <button class="tab is-active" data-tab="today" type="button" aria-selected="true">
         Hoy
@@ -64,196 +72,367 @@
         Registrar
       </button>
 
+      <button class="tab" data-tab="stats" type="button" aria-selected="false">
+        Estadísticas
+      </button>
+
       <button class="tab" data-tab="history" type="button" aria-selected="false">
         Historial
       </button>
+
+      <button class="tab" data-tab="settings" type="button" aria-selected="false">
+        Ajustes
+      </button>
     </nav>
 
-    <!-- =========================================================================
+    <!-- =========================================================
       HOY
-    ========================================================================== -->
+    ========================================================== -->
     <section class="panel is-active" id="tab-today" data-tabpanel="today" aria-label="Hoy">
+      <section class="heroCard" aria-label="Resumen del día">
+        <div class="heroContent">
+          <p class="eyebrow">Estado general</p>
+          <h1 class="heroTitle">Qué necesita atención hoy</h1>
+          <p class="heroText">
+            Revisa los cuidados vencidos, próximos o sin registrar. La memoria humana no debería estar
+            a cargo de las uñas, la barba y el caos capilar, pero aquí estamos.
+          </p>
+        </div>
+
+        <div class="heroStats" id="todaySummary" aria-live="polite">
+          <article class="miniMetric">
+            <span class="miniMetricValue" id="summaryOverdue">0</span>
+            <span class="miniMetricLabel">Vencidos</span>
+          </article>
+
+          <article class="miniMetric">
+            <span class="miniMetricValue" id="summarySoon">0</span>
+            <span class="miniMetricLabel">Próximos</span>
+          </article>
+
+          <article class="miniMetric">
+            <span class="miniMetricValue" id="summaryOk">0</span>
+            <span class="miniMetricLabel">En orden</span>
+          </article>
+        </div>
+      </section>
+
       <div class="grid2">
-        <article class="card" aria-label="Checklist de cuidado del día">
+        <article class="card" aria-label="Cuidados que necesitan atención">
           <header class="cardHead">
             <div>
-              <h1 class="h2">Hoy ✨</h1>
-              <p class="muted">Checklist rápido para no abandonar la estética al azar, esa institución humana tan peligrosa.</p>
+              <h2 class="h2">Atención prioritaria 🚦</h2>
+              <p class="muted">
+                Lo más urgente según la última vez que registraste cada cuidado y su frecuencia ideal.
+              </p>
             </div>
 
-            <button class="softBtn" id="todayAddQuick" type="button">
-              + Agregar
+            <button class="softBtn" id="preventiveRefresh" type="button">
+              Actualizar
             </button>
           </header>
 
-          <div class="list" id="todayList" aria-live="polite"></div>
+          <div class="list attentionList" id="preventiveList" aria-live="polite" aria-busy="false"></div>
 
           <div class="cardFoot">
-            <button class="ghostBtn" id="todayReset" type="button">
-              Reiniciar checklist
+            <button class="ghostBtn" id="preventiveBodyCheck" type="button">
+              Hacer revisión rápida 🪞
             </button>
           </div>
         </article>
 
-        <article class="card" aria-label="Mini check de cuidado diario">
+        <article class="card" aria-label="Registro rápido">
           <header class="cardHead">
             <div>
-              <h2 class="h2">Mini check 💆</h2>
-              <p class="muted">Treinta segundos para mirar cómo va el cuidado personal. Sin drama clínico, por fin.</p>
+              <h2 class="h2">Registrar rápido ⚡</h2>
+              <p class="muted">
+                Marca algo como hecho hoy sin llenar media declaración de renta estética.
+              </p>
             </div>
           </header>
 
-          <form id="checkinForm" class="form" autocomplete="off">
-            <div class="row">
-              <label class="lbl" for="imageFeeling">Cómo me siento hoy con mi imagen</label>
-              <select class="inp" id="imageFeeling">
-                <option value="">Seleccionar</option>
-                <option value="tranqui">Tranqui</option>
-                <option value="meh">Meh 😐</option>
-                <option value="divinamente">Divinamente ✨</option>
-                <option value="necesito auxilio estético">Necesito auxilio estético 😅</option>
-              </select>
-            </div>
-
-            <div class="row">
-              <label class="lbl" for="hairToday">Cabello hoy</label>
-              <select class="inp" id="hairToday">
-                <option value="">Seleccionar</option>
-                <option value="limpio">Limpio</option>
-                <option value="normal">Normal</option>
-                <option value="graso">Graso</option>
-                <option value="seco">Seco</option>
-                <option value="peinado">Peinado</option>
-                <option value="desastre controlado">Desastre controlado 💀</option>
-              </select>
-            </div>
-
-            <div class="row">
-              <label class="lbl" for="skinToday">Rostro / piel hoy</label>
-              <select class="inp" id="skinToday">
-                <option value="">Seleccionar</option>
-                <option value="bien">Bien</option>
-                <option value="normal">Normal</option>
-                <option value="reseca">Reseca</option>
-                <option value="brillante">Brillante</option>
-                <option value="sensible">Sensible</option>
-              </select>
-            </div>
-
-            <div class="row">
-              <label class="lbl" for="checkinNote">Nota breve</label>
-              <textarea
-                class="inp area"
-                id="checkinNote"
-                placeholder="Algo que quieras recordar de tu cuidado hoy..."
-                rows="3"
-                maxlength="500"
-              ></textarea>
-            </div>
-
-            <button class="primaryBtn" type="submit">
-              Guardar mini check
+          <div class="quickGrid" id="quickRegisterGrid" aria-live="polite">
+            <button class="quickAction" data-routine-key="haircut" data-register-now type="button">
+              <span class="quickIcon" aria-hidden="true">💇</span>
+              <span class="quickText">
+                <strong>Corte de cabello</strong>
+                <small>Registrar hecho hoy</small>
+              </span>
             </button>
-          </form>
+
+            <button class="quickAction" data-routine-key="face-cleaning" data-register-now type="button">
+              <span class="quickIcon" aria-hidden="true">🧼</span>
+              <span class="quickText">
+                <strong>Limpieza facial</strong>
+                <small>Registrar hecho hoy</small>
+              </span>
+            </button>
+
+            <button class="quickAction" data-routine-key="skincare" data-register-now type="button">
+              <span class="quickIcon" aria-hidden="true">🧴</span>
+              <span class="quickText">
+                <strong>Skincare</strong>
+                <small>Registrar hecho hoy</small>
+              </span>
+            </button>
+
+            <button class="quickAction" data-routine-key="beard" data-register-now type="button">
+              <span class="quickIcon" aria-hidden="true">🪒</span>
+              <span class="quickText">
+                <strong>Barba / rasurado</strong>
+                <small>Registrar hecho hoy</small>
+              </span>
+            </button>
+
+            <button class="quickAction" data-routine-key="nails-hands" data-register-now type="button">
+              <span class="quickIcon" aria-hidden="true">💅</span>
+              <span class="quickText">
+                <strong>Uñas manos</strong>
+                <small>Registrar hecho hoy</small>
+              </span>
+            </button>
+
+            <button class="quickAction" data-routine-key="nails-feet" data-register-now type="button">
+              <span class="quickIcon" aria-hidden="true">🦶</span>
+              <span class="quickText">
+                <strong>Uñas pies</strong>
+                <small>Registrar hecho hoy</small>
+              </span>
+            </button>
+          </div>
         </article>
       </div>
 
-      <article class="card" id="preventiveHost" aria-label="Agenda de cuidado">
+      <article class="card" aria-label="Depilación rápida">
         <header class="cardHead">
           <div>
-            <h2 class="h2">Agenda de cuidado 🗓️</h2>
-            <p class="muted">Rutinas y mantenimientos que se aproximan según tu historial.</p>
+            <h2 class="h2">Depilación por zonas 🪒</h2>
+            <p class="muted">
+              Cada zona puede tener su propia frecuencia. Porque el cuerpo decidió no sincronizarse, muy considerado.
+            </p>
           </div>
-
-          <button class="softBtn" id="preventiveRefresh" type="button">
-            Actualizar
-          </button>
         </header>
 
-        <div class="list" id="preventiveList" aria-live="polite" aria-busy="false"></div>
+        <div class="quickGrid">
+          <button class="quickAction" data-routine-key="depilation-chest" data-register-now type="button">
+            <span class="quickIcon" aria-hidden="true">🪒</span>
+            <span class="quickText">
+              <strong>Pecho</strong>
+              <small>Registrar depilación</small>
+            </span>
+          </button>
 
-        <div class="cardFoot">
-          <button class="ghostBtn" id="preventiveBodyCheck" type="button">
-            Revisión rápida 🪞
+          <button class="quickAction" data-routine-key="depilation-armpits" data-register-now type="button">
+            <span class="quickIcon" aria-hidden="true">🪒</span>
+            <span class="quickText">
+              <strong>Axilas</strong>
+              <small>Registrar depilación</small>
+            </span>
+          </button>
+
+          <button class="quickAction" data-routine-key="depilation-pelvis" data-register-now type="button">
+            <span class="quickIcon" aria-hidden="true">🪒</span>
+            <span class="quickText">
+              <strong>Pelvis</strong>
+              <small>Registrar depilación</small>
+            </span>
+          </button>
+
+          <button class="quickAction" data-routine-key="depilation-abdomen" data-register-now type="button">
+            <span class="quickIcon" aria-hidden="true">🪒</span>
+            <span class="quickText">
+              <strong>Abdomen</strong>
+              <small>Registrar depilación</small>
+            </span>
+          </button>
+
+          <button class="quickAction" data-routine-key="depilation-intimate" data-register-now type="button">
+            <span class="quickIcon" aria-hidden="true">🪒</span>
+            <span class="quickText">
+              <strong>Zona íntima</strong>
+              <small>Registrar depilación</small>
+            </span>
           </button>
         </div>
       </article>
+
+      <article class="card" aria-label="Checklist rápido de imagen">
+        <header class="cardHead">
+          <div>
+            <h2 class="h2">Checklist rápido diario 🪞</h2>
+            <p class="muted">
+              Cosas pequeñas del día. Esto no cambia las rutinas principales, solo ayuda a revisar el estado general.
+            </p>
+          </div>
+
+          <button class="softBtn" id="todayAddQuick" type="button">
+            + Agregar item
+          </button>
+        </header>
+
+        <div class="checkGrid" id="todayList" aria-live="polite"></div>
+
+        <div class="cardFoot">
+          <button class="ghostBtn" id="todayReset" type="button">
+            Reiniciar checklist
+          </button>
+        </div>
+
+        <form id="checkinForm" class="form compactForm" autocomplete="off">
+          <div class="row">
+            <label class="lbl" for="checkinNote">Nota rápida de revisión</label>
+            <textarea
+              class="inp area"
+              id="checkinNote"
+              placeholder="Ej: toca cortar uñas, comprar cuchillas, revisar skincare..."
+              rows="3"
+              maxlength="500"
+            ></textarea>
+          </div>
+
+          <select id="imageFeeling" hidden aria-hidden="true">
+            <option value=""></option>
+          </select>
+
+          <select id="hairToday" hidden aria-hidden="true">
+            <option value=""></option>
+          </select>
+
+          <select id="skinToday" hidden aria-hidden="true">
+            <option value=""></option>
+          </select>
+
+          <button class="primaryBtn" type="submit">
+            Guardar revisión rápida
+          </button>
+        </form>
+      </article>
     </section>
 
-    <!-- =========================================================================
+    <!-- =========================================================
       REGISTRAR
-    ========================================================================== -->
+    ========================================================== -->
     <section class="panel" id="tab-add" data-tabpanel="add" aria-label="Registrar">
       <article class="card">
         <header class="cardHead">
           <div>
-            <h2 class="h2">¿Qué registramos?</h2>
-            <p class="muted">Elige el tipo de cuidado. La app hace el resto, porque alguien tenía que poner orden en este neceser digital.</p>
+            <h2 class="h2">Registrar cuidado</h2>
+            <p class="muted">
+              Elige qué hiciste. La app calculará la última vez, la próxima fecha y el estado de la rutina.
+            </p>
           </div>
         </header>
 
         <div class="typeGrid" id="typeGrid" role="list">
-          <button class="typeCard" data-type="hair" type="button" role="listitem">
-            <div class="typeIcon" data-type-icon aria-hidden="true">💇</div>
+          <button class="typeCard" data-routine-key="haircut" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">💇</div>
             <div>
-              <div class="typeName" data-type-label>Cabello</div>
-              <div class="typeDesc">Corte, lavado, mascarilla, tinte, peinado o tratamiento.</div>
+              <div class="typeName">Corte de cabello</div>
+              <div class="typeDesc">Corte, retoque, arreglo o mantenimiento del cabello.</div>
             </div>
           </button>
 
-          <button class="typeCard" data-type="nails" type="button" role="listitem">
-            <div class="typeIcon" data-type-icon aria-hidden="true">💅</div>
+          <button class="typeCard" data-routine-key="face-cleaning" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">🧼</div>
             <div>
-              <div class="typeName" data-type-label>Uñas</div>
-              <div class="typeDesc">Manicure, pedicure, esmalte, cutículas o diseño.</div>
+              <div class="typeName">Limpieza facial</div>
+              <div class="typeDesc">Limpieza profunda, exfoliación o cuidado especial del rostro.</div>
             </div>
           </button>
 
-          <button class="typeCard" data-type="face" type="button" role="listitem">
-            <div class="typeIcon" data-type-icon aria-hidden="true">🧴</div>
+          <button class="typeCard" data-routine-key="skincare" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">🧴</div>
             <div>
-              <div class="typeName" data-type-label>Rostro / Skincare</div>
-              <div class="typeDesc">Limpieza, hidratación, mascarilla, sérum o protector solar.</div>
+              <div class="typeName">Skincare</div>
+              <div class="typeDesc">Rutina de mañana, noche, hidratación, protector solar o cuidado facial.</div>
             </div>
           </button>
 
-          <button class="typeCard" data-type="bodycare" type="button" role="listitem">
-            <div class="typeIcon" data-type-icon aria-hidden="true">✨</div>
+          <button class="typeCard" data-routine-key="beard" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">🪒</div>
             <div>
-              <div class="typeName" data-type-label>Cuerpo</div>
-              <div class="typeDesc">Exfoliación, hidratación, depilación, fragancia, manos o pies.</div>
+              <div class="typeName">Barba / rasurado</div>
+              <div class="typeDesc">Afeitada, recorte, perfilado o arreglo general de barba.</div>
             </div>
           </button>
 
-          <button class="typeCard" data-type="style" type="button" role="listitem">
-            <div class="typeIcon" data-type-icon aria-hidden="true">🪞</div>
+          <button class="typeCard" data-routine-key="depilation-chest" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">🪒</div>
             <div>
-              <div class="typeName" data-type-label>Imagen / Estilo</div>
-              <div class="typeDesc">Outfits, accesorios, cambios de look o ideas visuales.</div>
+              <div class="typeName">Depilación pecho</div>
+              <div class="typeDesc">Registro específico para la zona del pecho.</div>
             </div>
           </button>
 
-          <button class="typeCard" data-type="appointment" type="button" role="listitem">
-            <div class="typeIcon" data-type-icon aria-hidden="true">📅</div>
+          <button class="typeCard" data-routine-key="depilation-armpits" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">🪒</div>
             <div>
-              <div class="typeName" data-type-label>Cita / Salón</div>
-              <div class="typeDesc">Peluquería, barbería, uñas, cejas, estética o mantenimiento.</div>
+              <div class="typeName">Depilación axilas</div>
+              <div class="typeDesc">Registro específico para axilas.</div>
+            </div>
+          </button>
+
+          <button class="typeCard" data-routine-key="depilation-pelvis" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">🪒</div>
+            <div>
+              <div class="typeName">Depilación pelvis</div>
+              <div class="typeDesc">Registro específico para pelvis.</div>
+            </div>
+          </button>
+
+          <button class="typeCard" data-routine-key="depilation-abdomen" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">🪒</div>
+            <div>
+              <div class="typeName">Depilación abdomen</div>
+              <div class="typeDesc">Registro específico para abdomen.</div>
+            </div>
+          </button>
+
+          <button class="typeCard" data-routine-key="depilation-intimate" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">🪒</div>
+            <div>
+              <div class="typeName">Depilación zona íntima</div>
+              <div class="typeDesc">Registro privado para zona íntima.</div>
+            </div>
+          </button>
+
+          <button class="typeCard" data-routine-key="nails-hands" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">💅</div>
+            <div>
+              <div class="typeName">Corte de uñas manos</div>
+              <div class="typeDesc">Corte, limpieza o arreglo de uñas de las manos.</div>
+            </div>
+          </button>
+
+          <button class="typeCard" data-routine-key="nails-feet" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">🦶</div>
+            <div>
+              <div class="typeName">Corte de uñas pies</div>
+              <div class="typeDesc">Corte, limpieza o arreglo de uñas de los pies.</div>
             </div>
           </button>
 
           <button class="typeCard" data-type="product" type="button" role="listitem">
-            <div class="typeIcon" data-type-icon aria-hidden="true">🛍️</div>
+            <div class="typeIcon" aria-hidden="true">🛍️</div>
             <div>
-              <div class="typeName" data-type-label>Producto</div>
-              <div class="typeDesc">Compras, favoritos, productos usados o cosas por reponer.</div>
+              <div class="typeName">Producto</div>
+              <div class="typeDesc">Registrar compra, producto favorito o algo por reponer.</div>
             </div>
           </button>
 
-          <button class="typeCard" data-type="checkin" type="button" role="listitem">
-            <div class="typeIcon" data-type-icon aria-hidden="true">🌸</div>
+          <button class="typeCard" data-type="appointment" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">📅</div>
             <div>
-              <div class="typeName" data-type-label>Mini check</div>
-              <div class="typeDesc">Registro rápido de cómo va tu cuidado personal hoy.</div>
+              <div class="typeName">Cita / salón</div>
+              <div class="typeDesc">Agendar o registrar una cita de cuidado personal.</div>
+            </div>
+          </button>
+
+          <button class="typeCard" data-type="bodycare" type="button" role="listitem">
+            <div class="typeIcon" aria-hidden="true">➕</div>
+            <div>
+              <div class="typeName">Otro cuidado</div>
+              <div class="typeDesc">Cualquier mantenimiento personal que quieras medir.</div>
             </div>
           </button>
         </div>
@@ -263,7 +442,9 @@
         <header class="cardHead">
           <div>
             <h2 class="h2" id="entryTitle">Nuevo registro</h2>
-            <p class="muted" id="entryHint">Completa solo lo que aplique.</p>
+            <p class="muted" id="entryHint">
+              Registra la fecha y una nota opcional. Cero vueltas innecesarias, qué milagro.
+            </p>
           </div>
 
           <button class="iconBtn" id="entryClose" type="button" aria-label="Cerrar formulario">
@@ -273,11 +454,13 @@
 
         <form id="entryForm" class="form" autocomplete="off">
           <input type="hidden" id="type" />
+          <input type="hidden" id="routineId" />
+          <input type="hidden" id="routineKey" />
 
           <div class="row2">
             <div class="row" data-field="date">
               <label class="lbl" for="date">Fecha</label>
-              <input class="inp" id="date" type="date" />
+              <input class="inp" id="date" type="date" required />
             </div>
 
             <div class="row" data-field="time">
@@ -286,282 +469,109 @@
             </div>
           </div>
 
-          <div class="row" data-field="photo" hidden>
-            <label class="lbl" for="photo">Foto opcional</label>
-            <input class="inp" id="photo" type="file" accept="image/*" />
-          </div>
-
           <div class="row" data-field="title">
-            <label class="lbl" for="title">Título</label>
+            <label class="lbl" for="title">Nombre del cuidado</label>
             <input
               class="inp"
               id="title"
               type="text"
-              placeholder="Ej: Manicure lila, corte de puntas, skincare de noche..."
+              placeholder="Ej: Corte de cabello, skincare, uñas manos..."
               maxlength="90"
               required
             />
           </div>
 
-          <div class="row" data-field="careArea" hidden>
-            <label class="lbl" for="careArea">Área o proceso</label>
-            <input
-              class="inp"
-              id="careArea"
-              type="text"
-              placeholder="Ej: corte, tinte, manicure, exfoliación..."
-              maxlength="80"
-            />
-          </div>
-
-          <div class="row" data-field="service" hidden>
-            <label class="lbl" for="service">Servicio</label>
-            <input
-              class="inp"
-              id="service"
-              type="text"
-              placeholder="Ej: corte, uñas semipermanentes, cejas, limpieza facial..."
-              maxlength="80"
-            />
-          </div>
-
-          <div class="row" data-field="productName" hidden>
-            <label class="lbl" for="productName">Producto</label>
-            <input
-              class="inp"
-              id="productName"
-              type="text"
-              placeholder="Ej: protector solar, crema hidratante, esmalte..."
-              maxlength="90"
-            />
-          </div>
-
-          <div class="row" data-field="brand" hidden>
-            <label class="lbl" for="brand">Marca</label>
-            <input
-              class="inp"
-              id="brand"
-              type="text"
-              placeholder="Ej: L'Oréal, Neutrogena, Natura..."
-              maxlength="80"
-            />
-          </div>
-
-          <div class="row" data-field="category" hidden>
-            <label class="lbl" for="category">Categoría</label>
-            <select class="inp" id="category">
-              <option value="">Seleccionar</option>
-              <option value="cabello">Cabello</option>
-              <option value="uñas">Uñas</option>
-              <option value="rostro">Rostro</option>
-              <option value="cuerpo">Cuerpo</option>
-              <option value="perfume">Perfume / fragancia</option>
-              <option value="accesorio">Accesorio</option>
-              <option value="otro">Otro</option>
-            </select>
-          </div>
-
           <div class="row2">
-            <div class="row" data-field="color" hidden>
-              <label class="lbl" for="color">Color</label>
-              <input
-                class="inp"
-                id="color"
-                type="text"
-                placeholder="Ej: lila, nude, rojo cereza..."
-                maxlength="50"
-              />
+            <div class="row" data-field="status">
+              <label class="lbl" for="status">Estado</label>
+              <select class="inp" id="status">
+                <option value="done" selected>Hecho ✅</option>
+                <option value="pending">Pendiente</option>
+                <option value="scheduled">Programado</option>
+                <option value="repeatable">Repetible 🔁</option>
+                <option value="favorite">Favorito</option>
+              </select>
             </div>
 
-            <div class="row" data-field="design" hidden>
-              <label class="lbl" for="design">Diseño</label>
+            <div class="row" data-field="careArea">
+              <label class="lbl" for="careArea">Área / zona</label>
               <input
                 class="inp"
-                id="design"
+                id="careArea"
                 type="text"
-                placeholder="Ej: francés, flores, glitter..."
-                maxlength="70"
+                placeholder="Ej: cabello, rostro, pecho, axilas, uñas manos..."
+                maxlength="90"
               />
             </div>
           </div>
 
-          <div class="row" data-field="moment" hidden>
-            <label class="lbl" for="moment">Momento</label>
-            <select class="inp" id="moment">
-              <option value="">Seleccionar</option>
-              <option value="mañana">Mañana</option>
-              <option value="tarde">Tarde</option>
-              <option value="noche">Noche</option>
-              <option value="antes de salir">Antes de salir</option>
-              <option value="después de bañarse">Después de bañarse</option>
-              <option value="otro">Otro</option>
-            </select>
-          </div>
-
           <div class="row2">
-            <div class="row" data-field="place" hidden>
-              <label class="lbl" for="place">Lugar</label>
+            <div class="row" data-field="service">
+              <label class="lbl" for="service">Servicio o acción</label>
+              <input
+                class="inp"
+                id="service"
+                type="text"
+                placeholder="Ej: corte, rasurado, depilación, limpieza..."
+                maxlength="90"
+              />
+            </div>
+
+            <div class="row" data-field="place">
+              <label class="lbl" for="place">Lugar opcional</label>
               <input
                 class="inp"
                 id="place"
                 type="text"
-                placeholder="Ej: casa, salón, barbería..."
-                maxlength="80"
-              />
-            </div>
-
-            <div class="row" data-field="professional" hidden>
-              <label class="lbl" for="professional">Profesional</label>
-              <input
-                class="inp"
-                id="professional"
-                type="text"
-                placeholder="Nombre de quien lo hizo"
-                maxlength="80"
+                placeholder="Ej: casa, barbería, salón..."
+                maxlength="90"
               />
             </div>
           </div>
 
           <div class="row2">
-            <div class="row" data-field="cost" hidden>
-              <label class="lbl" for="cost">Costo</label>
+            <div class="row" data-field="professional">
+              <label class="lbl" for="professional">Profesional opcional</label>
+              <input
+                class="inp"
+                id="professional"
+                type="text"
+                placeholder="Ej: nombre del barbero, esteticista..."
+                maxlength="90"
+              />
+            </div>
+
+            <div class="row" data-field="cost">
+              <label class="lbl" for="cost">Costo opcional</label>
               <input
                 class="inp"
                 id="cost"
                 type="text"
                 inputmode="numeric"
-                placeholder="Ej: 45000"
-                maxlength="14"
-              />
-            </div>
-
-            <div class="row" data-field="price" hidden>
-              <label class="lbl" for="price">Precio</label>
-              <input
-                class="inp"
-                id="price"
-                type="text"
-                inputmode="numeric"
-                placeholder="Ej: 32000"
-                maxlength="14"
+                placeholder="Ej: 25000"
+                maxlength="30"
               />
             </div>
           </div>
 
-          <div class="row" data-field="repurchase" hidden>
-            <label class="lbl" for="repurchase">¿Lo volverías a comprar?</label>
-            <select class="inp" id="repurchase">
-              <option value="">Seleccionar</option>
-              <option value="sí">Sí</option>
-              <option value="no">No</option>
-              <option value="tal vez">Tal vez</option>
-            </select>
-          </div>
-
-          <div class="row" data-field="occasion" hidden>
-            <label class="lbl" for="occasion">Ocasión</label>
+          <div class="row" data-field="productName">
+            <label class="lbl" for="productName">Producto usado opcional</label>
             <input
               class="inp"
-              id="occasion"
+              id="productName"
               type="text"
-              placeholder="Ej: clase, reunión, salida, presentación..."
-              maxlength="80"
+              placeholder="Ej: cuchilla, crema, exfoliante, bloqueador..."
+              maxlength="120"
             />
-          </div>
-
-          <div class="row" data-field="outfit" hidden>
-            <label class="lbl" for="outfit">Prenda o look clave</label>
-            <input
-              class="inp"
-              id="outfit"
-              type="text"
-              placeholder="Ej: chaqueta negra, vestido lila, outfit cómodo..."
-              maxlength="100"
-            />
-          </div>
-
-          <div class="row" data-field="accessory" hidden>
-            <label class="lbl" for="accessory">Accesorio</label>
-            <input
-              class="inp"
-              id="accessory"
-              type="text"
-              placeholder="Ej: aretes, collar, gafas, reloj..."
-              maxlength="80"
-            />
-          </div>
-
-          <div class="row" data-field="imageFeeling" hidden>
-            <label class="lbl" for="entryImageFeeling">Cómo me siento con mi imagen</label>
-            <select class="inp" id="entryImageFeeling">
-              <option value="">Seleccionar</option>
-              <option value="tranqui">Tranqui</option>
-              <option value="meh">Meh</option>
-              <option value="divinamente">Divinamente</option>
-              <option value="necesito auxilio estético">Necesito auxilio estético</option>
-            </select>
-          </div>
-
-          <div class="row2">
-            <div class="row" data-field="hairToday" hidden>
-              <label class="lbl" for="hairTodayEntry">Cabello hoy</label>
-              <select class="inp" id="hairTodayEntry">
-                <option value="">Seleccionar</option>
-                <option value="limpio">Limpio</option>
-                <option value="normal">Normal</option>
-                <option value="graso">Graso</option>
-                <option value="seco">Seco</option>
-                <option value="peinado">Peinado</option>
-                <option value="desastre controlado">Desastre controlado</option>
-              </select>
-            </div>
-
-            <div class="row" data-field="skinToday" hidden>
-              <label class="lbl" for="skinTodayEntry">Rostro / piel hoy</label>
-              <select class="inp" id="skinTodayEntry">
-                <option value="">Seleccionar</option>
-                <option value="bien">Bien</option>
-                <option value="normal">Normal</option>
-                <option value="reseca">Reseca</option>
-                <option value="brillante">Brillante</option>
-                <option value="sensible">Sensible</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row" data-field="rating" hidden>
-            <label class="lbl" for="rating">Resultado</label>
-            <select class="inp" id="rating">
-              <option value="">Seleccionar</option>
-              <option value="me encantó">Me encantó 💖</option>
-              <option value="normal">Normal</option>
-              <option value="no repetiría">No repetiría</option>
-              <option value="1/5">1 / 5</option>
-              <option value="2/5">2 / 5</option>
-              <option value="3/5">3 / 5</option>
-              <option value="4/5">4 / 5</option>
-              <option value="5/5">5 / 5</option>
-            </select>
-          </div>
-
-          <div class="row" data-field="status">
-            <label class="lbl" for="status">Estado</label>
-            <select class="inp" id="status">
-              <option value="pending">Pendiente</option>
-              <option value="scheduled">Agendado</option>
-              <option value="done" selected>Hecho ✅</option>
-              <option value="repeatable">Repetible 🔁</option>
-              <option value="favorite">Favorito ⭐</option>
-            </select>
           </div>
 
           <div class="row" data-field="tags">
-            <label class="lbl" for="tags">Etiquetas</label>
+            <label class="lbl" for="tags">Etiquetas opcionales</label>
             <input
               class="inp"
               id="tags"
               type="text"
-              placeholder="Ej: cabello; corte; favorito"
+              placeholder="Ej: urgente; casa; barbería; piel"
               maxlength="140"
             />
           </div>
@@ -571,28 +581,148 @@
             <textarea
               class="inp area"
               id="details"
-              placeholder="Resultados, cómo quedó, qué producto usé, próxima vez..."
+              placeholder="Ej: quedó bien, repetir antes, comprar producto, revisar irritación..."
               rows="4"
               maxlength="1400"
             ></textarea>
           </div>
 
-          <button class="primaryBtn" type="submit">
-            Guardar registro
-          </button>
+          <div class="row" data-field="photo">
+            <label class="lbl" for="photo">Foto opcional</label>
+            <input class="inp" id="photo" type="file" accept="image/*" />
+          </div>
+
+          <!-- Campos ocultos heredados para compatibilidad con ui.js / app.js -->
+          <input class="inp" id="bodyArea" type="text" hidden aria-hidden="true" />
+          <input class="inp" id="zone" type="text" hidden aria-hidden="true" />
+          <input class="inp" id="brand" type="text" hidden aria-hidden="true" />
+          <select class="inp" id="category" hidden aria-hidden="true">
+            <option value=""></option>
+          </select>
+          <input class="inp" id="color" type="text" hidden aria-hidden="true" />
+          <input class="inp" id="design" type="text" hidden aria-hidden="true" />
+          <select class="inp" id="moment" hidden aria-hidden="true">
+            <option value=""></option>
+          </select>
+          <input class="inp" id="price" type="text" hidden aria-hidden="true" />
+          <select class="inp" id="repurchase" hidden aria-hidden="true">
+            <option value=""></option>
+          </select>
+          <input class="inp" id="occasion" type="text" hidden aria-hidden="true" />
+          <input class="inp" id="outfit" type="text" hidden aria-hidden="true" />
+          <input class="inp" id="accessory" type="text" hidden aria-hidden="true" />
+          <select class="inp" id="rating" hidden aria-hidden="true">
+            <option value=""></option>
+          </select>
+
+          <div class="formActions">
+            <button class="primaryBtn" type="submit">
+              Guardar registro
+            </button>
+          </div>
         </form>
       </article>
     </section>
 
-    <!-- =========================================================================
+    <!-- =========================================================
+      ESTADÍSTICAS
+    ========================================================== -->
+    <section class="panel" id="tab-stats" data-tabpanel="stats" aria-label="Estadísticas">
+      <article class="card">
+        <header class="cardHead">
+          <div>
+            <h2 class="h2">Estadísticas 📊</h2>
+            <p class="muted">
+              Promedios, ranking y estado general calculados desde tus registros y rutinas activas.
+            </p>
+          </div>
+
+          <button class="softBtn" id="statsRefresh" type="button">
+            Actualizar
+          </button>
+        </header>
+
+        <div class="statsGrid" id="statsSummary" aria-live="polite">
+          <article class="statCard">
+            <span class="statValue" id="totalEntries">0</span>
+            <span class="statLabel">Registros totales</span>
+          </article>
+
+          <article class="statCard">
+            <span class="statValue" id="mostConstantTask">—</span>
+            <span class="statLabel">Más constante</span>
+          </article>
+
+          <article class="statCard">
+            <span class="statValue" id="mostNeglectedTask">—</span>
+            <span class="statLabel">Más descuidado</span>
+          </article>
+
+          <article class="statCard">
+            <span class="statValue" id="averageCareScore">—</span>
+            <span class="statLabel">Estado general</span>
+          </article>
+        </div>
+      </article>
+
+      <article class="card">
+        <header class="cardHead">
+          <div>
+            <h2 class="h2">Frecuencia por cuidado</h2>
+            <p class="muted">
+              Tabla preparada para mostrar frecuencia real, última vez y estado por rutina.
+            </p>
+          </div>
+        </header>
+
+        <div class="tableWrap">
+          <table class="dataTable" aria-label="Tabla de estadísticas por cuidado">
+            <thead>
+              <tr>
+                <th scope="col">Cuidado</th>
+                <th scope="col">Última vez</th>
+                <th scope="col">Días</th>
+                <th scope="col">Promedio real</th>
+                <th scope="col">Meta</th>
+                <th scope="col">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="statsTableBody">
+              <tr>
+                <td colspan="6" class="emptyCell">
+                  Todavía no hay estadísticas. Registra algunos cuidados y vuelve a ver cómo la app finge tener una vida organizada.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="card">
+        <header class="cardHead">
+          <div>
+            <h2 class="h2">Ranking de atención</h2>
+            <p class="muted">
+              Ordenado de lo más urgente a lo menos urgente.
+            </p>
+          </div>
+        </header>
+
+        <div class="list" id="attentionRanking" aria-live="polite"></div>
+      </article>
+    </section>
+
+    <!-- =========================================================
       HISTORIAL
-    ========================================================================== -->
+    ========================================================== -->
     <section class="panel" id="tab-history" data-tabpanel="history" aria-label="Historial">
       <article class="card">
         <header class="cardHead">
           <div>
             <h2 class="h2">Historial 🗂️</h2>
-            <p class="muted">Todo registrado con filtros simples. Una bitácora estética, que ya era hora.</p>
+            <p class="muted">
+              Todos los cuidados registrados, con filtros simples. Confiar en “yo me acuerdo” era una política pública fallida.
+            </p>
           </div>
 
           <button class="softBtn" id="exportBtn" type="button">
@@ -604,14 +734,6 @@
           <label class="srOnly" for="filterType">Filtrar por tipo</label>
           <select class="inp" id="filterType">
             <option value="">Tipo: todos</option>
-            <option value="hair">💇 Cabello</option>
-            <option value="nails">💅 Uñas</option>
-            <option value="face">🧴 Rostro / Skincare</option>
-            <option value="bodycare">✨ Cuerpo</option>
-            <option value="style">🪞 Imagen / Estilo</option>
-            <option value="appointment">📅 Cita / Salón</option>
-            <option value="product">🛍️ Producto</option>
-            <option value="checkin">🌸 Mini check</option>
           </select>
 
           <label class="srOnly" for="filterText">Buscar</label>
@@ -619,7 +741,7 @@
             class="inp"
             id="filterText"
             type="search"
-            placeholder="Buscar por título, etiquetas, producto, lugar o notas..."
+            placeholder="Buscar por cuidado, etiquetas o notas..."
             autocomplete="off"
           />
 
@@ -631,11 +753,76 @@
         <div class="timeline" id="timeline" aria-live="polite"></div>
       </article>
     </section>
+
+    <!-- =========================================================
+      AJUSTES
+    ========================================================== -->
+    <section class="panel" id="tab-settings" data-tabpanel="settings" aria-label="Ajustes">
+      <article class="card" id="routineSettingsHost">
+        <header class="cardHead">
+          <div>
+            <h2 class="h2">Rutinas configurables ⚙️</h2>
+            <p class="muted">
+              Cambia frecuencias, pausa rutinas o agrega nuevos cuidados. Por fin un lugar donde el caos pide permiso.
+            </p>
+          </div>
+
+          <button class="softBtn" type="button" id="addRoutineBtn">
+            + Agregar
+          </button>
+        </header>
+
+        <div class="settingsList" id="routineSettingsList" aria-live="polite">
+          <div class="muted">
+            Cargando rutinas...
+          </div>
+        </div>
+
+        <div class="cardFoot splitFoot">
+          <button class="primaryBtn" id="saveSettingsBtn" type="button">
+            Guardar frecuencias
+          </button>
+
+          <button class="ghostBtn" id="resetSettingsBtn" type="button">
+            Restaurar sugeridas
+          </button>
+        </div>
+      </article>
+
+      <article class="card">
+        <header class="cardHead">
+          <div>
+            <h2 class="h2">Datos y respaldo</h2>
+            <p class="muted">
+              Exporta o importa tus registros para no perderlos. El backup existe para que la tragedia digital no gane.
+            </p>
+          </div>
+        </header>
+
+        <div class="backupActions">
+          <button class="softBtn" id="settingsExportBtn" type="button">
+            Exportar datos
+          </button>
+
+          <label class="softBtn fileBtn" for="importFile">
+            Importar datos
+            <input id="importFile" type="file" accept="application/json" hidden />
+          </label>
+
+          <button class="dangerBtn" id="clearAllDataBtn" type="button">
+            Borrar todo
+          </button>
+        </div>
+      </article>
+    </section>
   </main>
 
+  <!-- =========================================================
+    BOTTOM BAR MOBILE
+  ========================================================== -->
   <footer class="bbar" aria-label="Barra inferior">
     <button class="bbtn is-active" data-tab="today" type="button">
-      <span class="bico" aria-hidden="true">✨</span>
+      <span class="bico" aria-hidden="true">🚦</span>
       <span>Hoy</span>
     </button>
 
@@ -644,12 +831,25 @@
       <span>Registrar</span>
     </button>
 
+    <button class="bbtn" data-tab="stats" type="button">
+      <span class="bico" aria-hidden="true">📊</span>
+      <span>Stats</span>
+    </button>
+
     <button class="bbtn" data-tab="history" type="button">
       <span class="bico" aria-hidden="true">🗂️</span>
       <span>Historial</span>
     </button>
+
+    <button class="bbtn" data-tab="settings" type="button">
+      <span class="bico" aria-hidden="true">⚙️</span>
+      <span>Ajustes</span>
+    </button>
   </footer>
 
+  <!-- =========================================================
+    TOAST
+  ========================================================== -->
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <noscript>

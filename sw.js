@@ -11,7 +11,7 @@
 ============================================================================= */
 
 const APP_NAME = 'Cuidado Personal';
-const CACHE_VERSION = 'v1.0.0';
+const CACHE_VERSION = 'v3.1.0';
 const STATIC_CACHE = `cuidado-personal-static-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `cuidado-personal-runtime-${CACHE_VERSION}`;
 
@@ -81,6 +81,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  if (isAppShellAsset(request)) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
   if (isStaticAsset(request)) {
     event.respondWith(cacheFirst(request));
     return;
@@ -119,6 +124,18 @@ async function cacheFirst(request) {
     await putRuntimeCache(request, response.clone());
     return response;
   } catch {
+    return offlineFallback();
+  }
+}
+
+async function networkFirst(request) {
+  try {
+    const response = await fetch(new Request(request, { cache: 'reload' }));
+    await putRuntimeCache(request, response.clone());
+    return response;
+  } catch {
+    const cached = await caches.match(request);
+    if (cached) return cached;
     return offlineFallback();
   }
 }
@@ -292,5 +309,22 @@ function offlineFallback() {
         'Content-Type': 'text/html; charset=utf-8'
       }
     }
+  );
+}
+
+function isAppShellAsset(request) {
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+
+  return (
+    pathname.endsWith('/index.html') ||
+    pathname.endsWith('/main.js') ||
+    pathname.endsWith('/sw.js') ||
+    pathname.endsWith('/src/app.js') ||
+    pathname.endsWith('/src/db.js') ||
+    pathname.endsWith('/src/ui.js') ||
+    pathname.endsWith('/styles/theme.css') ||
+    pathname.endsWith('/styles/app.css') ||
+    pathname.endsWith('/manifest.webmanifest')
   );
 }
