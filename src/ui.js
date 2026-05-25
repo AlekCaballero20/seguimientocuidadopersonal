@@ -124,7 +124,7 @@ export const CARE_TYPE_META = {
     label: 'Mini check',
     icon: '🌸',
     chip: 'teal',
-    description: 'Revisión rápida de cuidado personal.'
+    description: 'Nota breve del día para el cuidado personal.'
   },
 
   // Compatibilidad directa con tipos viejos o específicos.
@@ -1902,7 +1902,7 @@ const FIELD_COPY = {
     },
     service: {
       label: 'Acción',
-      placeholder: 'Hidratación, exfoliación, revisión, limpieza...'
+      placeholder: 'Hidratación, exfoliación, limpieza, fragancia...'
     },
     productName: {
       label: 'Producto corporal',

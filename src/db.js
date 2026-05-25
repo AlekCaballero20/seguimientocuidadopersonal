@@ -449,7 +449,7 @@ function normalizeChecklist(checklist = {}) {
     ...checklist,
     id: cleanStr(checklist.id) || genId('c'),
     profile: cleanStr(checklist.profile) || 'Alek',
-    title: cleanStr(checklist.title) || 'Revisión rápida de cuidado',
+    title: cleanStr(checklist.title) || 'Checklist de cuidado',
     scheduleDays: Number(checklist.scheduleDays || 14),
     lastCompleted: checklist.lastCompleted || null,
     nextDue: checklist.nextDue || null,

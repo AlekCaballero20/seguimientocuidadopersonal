@@ -51,7 +51,7 @@ import {
 // =============================================================================
 
 const APP_NAME = 'Cuidado Personal';
-const APP_VERSION = 3;
+const APP_VERSION = 4;
 
 const PROFILES = ['Alek', 'Cata', 'Compartido'];
 
@@ -349,10 +349,9 @@ const DEFAULT_QUICK_ITEMS = [
   { id: 'skincare_pm', title: 'Skincare de noche', subtitle: 'limpiar + hidratar', done: false }
 ];
 
-const BASE_CHECKLISTS = [
-  checklist('chk_care_alek', 'Alek'),
-  checklist('chk_care_cata', 'Cata')
-];
+// El checklist recurrente se desactivó para dejar la pantalla de hoy
+// enfocada en rutinas reales y evitar ruido visual.
+const BASE_CHECKLISTS = [];
 
 // =============================================================================
 // Estado
@@ -513,7 +512,7 @@ function checklist(id, profile) {
   return {
     id,
     profile,
-    title: 'Revisión rápida de cuidado',
+    title: 'Checklist de cuidado',
     scheduleDays: 14,
     active: true,
     items: buildCareReviewItems()
@@ -844,7 +843,7 @@ function bindCheckin() {
     });
 
     e.target.reset();
-    toast('Mini check guardado');
+    toast('Nota del día guardada');
   });
 }
 
@@ -1209,6 +1208,7 @@ async function registerRoutineNow(routineItem) {
   renderPreventive();
   renderStats();
   renderRoutineSettings();
+  hydrateRoutineCards();
 
   toast(`${routineItem.title} registrado`);
 }
@@ -1670,17 +1670,6 @@ function bindPreventive() {
       await registerRoutineNow(rut);
       return;
     }
-
-    const checklistBtn = e.target.closest('[data-checklist-start], #preventiveBodyCheck');
-
-    if (checklistBtn) {
-      const cid = checklistBtn.getAttribute('data-checklist-start');
-      const checklist = state.checklists.find((c) => c.id === cid) || getChecklistForCurrentProfile();
-
-      if (!checklist) return;
-
-      await completeCareReview(checklist);
-    }
   });
 }
 
@@ -1706,6 +1695,8 @@ function renderPreventive() {
 
   if (!routines.length && !checks.length) {
     listEl.innerHTML = `<div class="muted">Aún no hay próximos cuidados cargados.</div>`;
+    updateTodaySummary([], today);
+    hydrateRoutineCards();
     return;
   }
 
@@ -1713,6 +1704,22 @@ function renderPreventive() {
     ...routines.map((r) => routineRowHTML(r, today)),
     ...checks.map((c) => checklistRowHTML(c, today))
   ].join('');
+
+  updateTodaySummary(routines, today);
+  hydrateRoutineCards();
+}
+
+function updateTodaySummary(routines = [], today = todayKey()) {
+  const counts = { overdue: 0, soon: 0, ok: 0 };
+
+  for (const routine of routines || []) {
+    const status = routineStatus(normalizeRoutineDates(routine, today), today);
+    counts[status] = (counts[status] || 0) + 1;
+  }
+
+  setText('summaryOverdue', String(counts.overdue || 0));
+  setText('summarySoon', String(counts.soon || 0));
+  setText('summaryOk', String(counts.ok || 0));
 }
 
 function getVisibleRoutines(today) {
@@ -1731,10 +1738,10 @@ function getVisibleRoutines(today) {
 }
 
 function getVisibleChecklists(today) {
-  return (state.checklists || [])
-    .filter((c) => c.active !== false)
-    .filter((c) => (state.profile === 'Compartido' ? c.profile === 'Compartido' : c.profile === state.profile))
-    .map((c) => normalizeChecklistDates(c, today));
+  // Desactivado: antes mostraba un checklist recurrente como si fuera una
+  // rutina más. Se conserva la función para compatibilidad con backups viejos,
+  // pero no se renderiza en la pantalla principal.
+  return [];
 }
 
 function routineRowHTML(r, today) {
@@ -1769,7 +1776,7 @@ function checklistRowHTML(c, today) {
       <div class="itemLeft">
         <div class="dot"></div>
         <div class="itemText">
-          <div class="itemTitle">🪞 ${esc(c.title || 'Revisión rápida')} ${badge}</div>
+          <div class="itemTitle">🪞 ${esc(c.title || 'Checklist de cuidado')} ${badge}</div>
           <div class="itemMeta">${esc(meta)}</div>
         </div>
       </div>
@@ -1788,7 +1795,7 @@ async function completeCareReview(checklist) {
     type: 'checkin',
     routineId: '',
     routineKey: '',
-    title: checklist.title || 'Revisión rápida de cuidado',
+    title: checklist.title || 'Checklist de cuidado',
     dateKey: today,
     time: currentTimeKey(),
     status: 'done',
@@ -1819,11 +1826,11 @@ async function completeCareReview(checklist) {
   renderTimeline();
   renderPreventive();
 
-  toast('Revisión rápida registrada');
+  toast('Checklist registrado');
 }
 
 function reviewDetailsFromChecklist(checklist) {
-  const lines = ['Revisión visual de cuidado personal:'];
+  const lines = ['Checklist visual de cuidado personal:'];
 
   for (const it of checklist.items || []) {
     if (it.kind === 'section') {
@@ -1851,6 +1858,17 @@ function normalizeRoutineDates(r, today) {
       ...r,
       lastDate,
       nextDate: addDays(lastDate, Number(r.intervalDays || 0))
+    };
+  }
+
+  const routineKey = normalizeRoutineKey(r.routineKey || r?.meta?.routineKey || r?.meta?.match?.routineKey || '');
+  const isCatalogRoutine = CARE_CATALOG.some((spec) => spec.key === routineKey);
+
+  if (isCatalogRoutine) {
+    return {
+      ...r,
+      lastDate: null,
+      nextDate: today
     };
   }
 
@@ -1921,7 +1939,10 @@ function entryMatchesRoutine(entry, routineItem) {
     return true;
   }
 
-  const keywords = mergeKeywords(match.keywords || [], match.tags || [], [routineItem.title])
+  // No mezclar tags genéricos como "uñas" dentro del fallback de palabras clave.
+  // Ese detalle tan humano hacía que manos y pies se marcaran mutuamente,
+  // porque aparentemente una palabra común ya era "prueba suficiente". No.
+  const keywords = mergeKeywords(match.keywords || [], [routineItem.title])
     .map(normalizeText)
     .filter(Boolean);
 
@@ -1979,7 +2000,7 @@ function routineMetaLine(r, today) {
 }
 
 function checklistMetaLine(c, today) {
-  const last = c.lastCompleted ? fmtDatePretty(c.lastCompleted) : 'sin revisión previa';
+  const last = c.lastCompleted ? fmtDatePretty(c.lastCompleted) : 'sin registro previo';
   const next = c.nextDue ? fmtDatePretty(c.nextDue) : 'sin fecha';
   const delta = deltaLabel(today, c.nextDue || today);
 
@@ -2476,22 +2497,51 @@ function hydrateTypeCards() {
 }
 
 function hydrateRoutineCards() {
+  const today = todayKey();
+
   document.querySelectorAll('[data-routine-key], [data-care-key], [data-quick-task]').forEach((el) => {
     const key = getRoutineKeyFromElement(el);
     if (!key) return;
 
     const routineItem = getRoutineForCurrentProfile(key);
+    const normalizedRoutine = routineItem ? normalizeRoutineDates(routineItem, today) : null;
     const spec = CARE_CATALOG.find((x) => x.key === key);
 
-    const title = routineItem?.title || spec?.title || key;
-    const iconValue = routineItem?.icon || spec?.icon || '🌸';
+    const title = normalizedRoutine?.title || spec?.title || key;
+    const iconValue = normalizedRoutine?.icon || spec?.icon || '🌸';
 
     const label = el.querySelector('[data-routine-label], [data-type-label]');
     if (label) label.textContent = title;
 
     const icon = el.querySelector('[data-routine-icon], [data-type-icon]');
     if (icon) icon.textContent = iconValue;
+
+    const status = normalizedRoutine ? routineStatus(normalizedRoutine, today) : '';
+    if (status) el.dataset.routineStatus = status;
+    else delete el.dataset.routineStatus;
+
+    el.classList.toggle('is-done-today', Boolean(normalizedRoutine?.lastDate === today));
+
+    const quickHint = el.querySelector('.quickText small');
+    if (quickHint && el.hasAttribute('data-register-now')) {
+      quickHint.textContent = quickRoutineMicrocopy(normalizedRoutine, today);
+    }
   });
+}
+
+function quickRoutineMicrocopy(routineItem, today) {
+  if (!routineItem) return 'Tocar para registrar hoy';
+
+  if (routineItem.lastDate === today) {
+    return `Hecho hoy ✅ · próxima: ${fmtDatePretty(routineItem.nextDate || today)}`;
+  }
+
+  if (!routineItem.lastDate) {
+    return 'Sin registro · tocar para guardar hoy';
+  }
+
+  const next = routineItem.nextDate || today;
+  return `Última: ${fmtDatePretty(routineItem.lastDate)} · ${deltaLabel(today, next)}`;
 }
 
 function hydrateFilterOptions() {
