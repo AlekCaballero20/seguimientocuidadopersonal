@@ -11,7 +11,7 @@
 ============================================================================= */
 
 const APP_NAME = 'Cuidado Personal';
-const CACHE_VERSION = 'v3.1.0';
+const CACHE_VERSION = 'v3.2.0';
 const STATIC_CACHE = `cuidado-personal-static-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `cuidado-personal-runtime-${CACHE_VERSION}`;
 
