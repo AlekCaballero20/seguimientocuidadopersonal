@@ -1919,12 +1919,21 @@ function entryMatchesRoutine(entry, routineItem) {
   const entryRoutineId = String(entry.routineId || entry?.meta?.routineId || '').trim();
   const routineId = String(routineItem.id || '').trim();
 
-  if (entryRoutineId && routineId && entryRoutineId === routineId) return true;
+  // Si el registro ya trae un identificador fuerte (id o clave de rutina),
+  // exige coincidencia EXACTA y no caigas al match difuso. Antes, registrar
+  // "Depilación pecho" marcaba también axilas/pelvis/abdomen/íntima porque el
+  // fallback por keywords reconocía el tag genérico "depilacion" en cualquier
+  // rutina del mismo tipo. Lo mismo pasaba con uñas manos vs pies.
+  if (entryRoutineId) {
+    return Boolean(routineId) && entryRoutineId === routineId;
+  }
 
   const entryRoutineKey = normalizeRoutineKey(entry.routineKey || entry?.meta?.routineKey || '');
   const routineKey = normalizeRoutineKey(routineItem.routineKey || routineItem?.meta?.routineKey || routineItem?.meta?.match?.routineKey || '');
 
-  if (entryRoutineKey && routineKey && entryRoutineKey === routineKey) return true;
+  if (entryRoutineKey) {
+    return Boolean(routineKey) && entryRoutineKey === routineKey;
+  }
 
   const match = routineItem?.meta?.match || routineItem?.match || {};
   const wantedType = normalizeEntryType(match.type || routineItem.type || '');
@@ -1939,12 +1948,18 @@ function entryMatchesRoutine(entry, routineItem) {
     return true;
   }
 
-  // No mezclar tags genéricos como "uñas" dentro del fallback de palabras clave.
-  // Ese detalle tan humano hacía que manos y pies se marcaran mutuamente,
-  // porque aparentemente una palabra común ya era "prueba suficiente". No.
+  // No mezclar tags genéricos como "uñas" o "depilacion" dentro del fallback de
+  // palabras clave. Ese detalle tan humano hacía que manos y pies (o las zonas
+  // de depilación) se marcaran mutuamente, porque una palabra común compartida
+  // por todo el tipo ya era "prueba suficiente". No.
+  const genericTokens = new Set(
+    (TYPE_META[wantedType]?.defaultTags || []).map(normalizeText).filter(Boolean)
+  );
+
   const keywords = mergeKeywords(match.keywords || [], [routineItem.title])
     .map(normalizeText)
-    .filter(Boolean);
+    .filter(Boolean)
+    .filter((keyword) => !genericTokens.has(keyword));
 
   if (!keywords.length) return !requiredTags.length;
 
